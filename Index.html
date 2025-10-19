@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VendoX</title>
+    <style>
+        :root {
+            --light-bg: #f5f5f7;
+            --light-card-bg: #ffffff;
+            --light-text: #1d1d1f;
+            --light-primary: #0071e3;
+            --light-primary-glow: rgba(0, 113, 227, 0.4);
+            --light-border: #d2d2d7;
+
+            --dark-bg: #121212;
+            --dark-card-bg: #1e1e1e;
+            --dark-text: #e1e1e1;
+            --dark-primary: #0a84ff;
+            --dark-primary-glow: rgba(10, 132, 255, 0.4);
+            --dark-border: #3a3a3c;
+        }
+
+        html {
+            box-sizing: border-box;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body[data-theme="light"] {
+            --bg-color: var(--light-bg);
+            --card-bg-color: var(--light-card-bg);
+            --text-color: var(--light-text);
+            --primary-color: var(--light-primary);
+            --primary-glow: var(--light-primary-glow);
+            --border-color: var(--light-border);
+        }
+
+        body[data-theme="dark"] {
+            --bg-color: var(--dark-bg);
+            --card-bg-color: var(--dark-card-bg);
+            --text-color: var(--dark-text);
+            --primary-color: var(--dark-primary);
+            --primary-glow: var(--dark-primary-glow);
+            --border-color: var(--dark-border);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .theme-switcher {
+            cursor: pointer;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+        }
+
+        /* --- Slider Section --- */
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+            border-radius: 12px;
+            background-color: var(--card-bg-color);
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            aspect-ratio: 16 / 7;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .slide a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* FITS IMAGE WITHOUT CROPPING */
+            display: block;
+        }
+
+        /* --- Product Grid Section --- */
+        .product-grid {
+            display: grid;
+            /* IMPORTANT: Fixed 3-column layout */
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .product-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card-content {
+            flex-grow: 1;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .product-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .product-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header container">
+        <div class="logo">VendoX</div>
+        <button class="theme-switcher" id="theme-switcher" aria-label="Toggle light/dark theme">☀️</button>
+    </header>
+
+    <main class="container">
+        <!-- Slider Section -->
+        <section class="slider-container" id="slider-wrapper">
+            <div class="slider" id="slider">
+                <!-- Slides will be inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Product Display Section -->
+        <section>
+            <ul class="product-grid" id="product-grid">
+                <!-- Products will be inserted here by JavaScript -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 VendoX. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // PASTE YOUR FIREBASE CONFIG OBJECT HERE
+        const firebaseConfig = {
+  apiKey: "AIzaSyDHApqDHD7IJBHG-Bxlfabu47uAGUbWjIQ",
+  authDomain: "ecommerce-8eb49.firebaseapp.com",
+  databaseURL: "https://ecommerce-8eb49-default-rtdb.firebaseio.com",
+  projectId: "ecommerce-8eb49",
+  storageBucket: "ecommerce-8eb49.firebasestorage.app",
+  messagingSenderId: "344428246173",
+  appId: "1:344428246173:web:b4cb1f7f2d83bdea429074"
+};
+
+
+
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // UI Elements
+        const slider = document.getElementById('slider');
+        const sliderWrapper = document.getElementById('slider-wrapper');
+        const productGrid = document.getElementById('product-grid');
+        const themeSwitcher = document.getElementById('theme-switcher');
+
+        // --- Theme Switcher ---
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            themeSwitcher.textContent = theme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', theme);
+        }
+
+        themeSwitcher.addEventListener('click', () => {
+            const newTheme = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        });
+        
+        // Apply saved theme on initial load
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+
+        // --- Fetch and Display Sliders ---
+        const slidersRef = database.ref('slider');
+        let slidesData = [];
+        let currentSlideIndex = 0;
+        let slideInterval;
+
+        function renderSlider() {
+            slider.innerHTML = '';
+            slidesData.forEach(data => {
+                const slideElement = `
+                    <div class="slide">
+                        <a href="${data.url}" target="_blank">
+                            <img src="${data.image}" alt="Promotional Image">
+                        </a>
+                    </div>
+                `;
+                slider.insertAdjacentHTML('beforeend', slideElement);
+            });
+            
+            if (slidesData.length > 0) {
+                sliderWrapper.style.display = 'block';
+            } else {
+                sliderWrapper.style.display = 'none';
+            }
+
+            if (slidesData.length > 1) {
+                startAutoSlide();
+            }
+        }
+
+        function nextSlide() {
+            currentSlideIndex = (currentSlideIndex + 1) % slidesData.length;
+            slider.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+        }
+
+        function startAutoSlide() {
+            clearInterval(slideInterval); // Clear any existing interval
+            slideInterval = setInterval(nextSlide, 3000);
+        }
+
+        slidersRef.on('value', (snapshot) => {
+            slidesData = [];
+            if (snapshot.exists()) {
+                 snapshot.forEach(childSnapshot => {
+                    slidesData.push(childSnapshot.val());
+                });
+            }
+            renderSlider();
+        });
+
+
+        // --- Fetch and Display Products ---
+        const productsRef = database.ref('products');
+        
+        productsRef.on('value', (snapshot) => {
+            productGrid.innerHTML = '';
+            if (!snapshot.exists()) {
+                productGrid.innerHTML = '<p>No products available right now.</p>';
+                return;
+            }
+            snapshot.forEach(childSnapshot => {
+                const data = childSnapshot.val();
+                const productCard = `
+                    <li class="product-card">
+                        <div class="product-card-content">
+                            <img src="${data.image}" alt="${data.name}">
+                            <h3>${data.name}</h3>
+                        </div>
+                        <a href="${data.buttonUrl}" class="product-btn" target="_blank" rel="noopener noreferrer">${data.buttonText}</a>
+                    </li>
+                `;
+                productGrid.insertAdjacentHTML('beforeend', productCard);
+            });
+        });
+    </script>
+</body>
+</html>
